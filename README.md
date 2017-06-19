@@ -194,3 +194,66 @@ playBtn.dispose();
 
 ## The Bird Class
 1. Create a new package called sprites, and inside it a new Java class named "Bird"
+2. Our Bird class needs the following attributes:
+* a position, to determine where the bird is in the game world
+* a texture, to determine the visual representation of the bird, ie, what will be drawn on the screen
+* a velocity, to determine in which direction the bird moves (up, down, left, right)
+* a gravity, to determine the acceleration pulling the bird down (so he falls when not flying)
+Declare these instance variables as:
+```java
+private Vector3 position;
+private Vector3 velocity;
+private Texture bird;
+private static final int GRAVITY = -15;
+```
+
+3. Setup the Bird constructor, which takes a x and a y as integers:
+```java
+public Bird(int x, int y){
+    position = new Vector3(x, y, 0);
+    velocity = new Vector3(0, 0, 0);
+    texture = new Texture("bird.png");
+}
+```
+
+4. Create a method update to recalculate the bird's position in our game world. Note that we need to scale the velocity by the change in time (represented by `dt`) before adding it to our position.
+```java
+public void update(float dt){
+    velocity.add(0, GRAVITY, 0);
+    velocity.scl(dt);
+    position.add(0, velocity.y, 0);
+    velocity.scl(1 / dt);
+}
+```
+
+5. Right-click on the class name (`Bird`) and `Generate...` > `Getter` > Select `position` and `bird` > Click `OK`. Refactor `getBird()` to `getTexture()`.
+
+6. Navigate to the `PlayState` class and remove the bird Texture. 
+* Recreate bird as an instance variable of the type Bird.
+* Initialize bird in the position (50, 100).
+* Inside the `update()` method, handle user input and update the bird's position.
+```java
+@Override
+public void update(float dt) {
+    handleInput();
+    bird.update(dt);
+}
+```
+
+7. Change the render method so it draws the updated bird.
+```java
+sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
+```
+
+8. Run. You should see the bird falling down. Try changing its initial coordinates to see it falling from different areas on the screen.
+
+
+
+
+
+
+
+
+
+
+
