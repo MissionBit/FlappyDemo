@@ -132,7 +132,7 @@ public class GameStateManager {
      batch.dispose();
   }
 ```
-16. Run (you should see a red screen)
+16. Run (you should see a black screen)
 
 ## Menu - Importing images
 1. Go to https://github.com/BrentAureli/FlappyDemo and download the repo. Unzip it and copy the images from android > assets to the android > assets in your project
@@ -170,6 +170,7 @@ playBtn.dispose();
 
 
 ## The Play State
+
 1. Create a new Java class named "PlayState" inside the package states.
 2. PlayState extends State
 3. Right-click the class name and select Generate > Implement methods...
@@ -193,6 +194,7 @@ playBtn.dispose();
 
 
 ## The Bird Class
+
 1. Create a new package called sprites, and inside it a new Java class named "Bird"
 2. Our Bird class needs the following attributes:
 * a position, to determine where the bird is in the game world
@@ -212,7 +214,7 @@ private static final int GRAVITY = -15;
 public Bird(int x, int y){
     position = new Vector3(x, y, 0);
     velocity = new Vector3(0, 0, 0);
-    texture = new Texture("bird.png");
+    bird = new Texture("bird.png");
 }
 ```
 
@@ -248,12 +250,90 @@ sb.draw(bird.getTexture(), bird.getPosition().x, bird.getPosition().y);
 8. Run. You should see the bird falling down. Try changing its initial coordinates to see it falling from different areas on the screen.
 
 
+## Make Birds Fly
+
+1. Inside of the Bird class, create a public void method called `jump`. This method sets the `velocity.y` to 250.
+
+2. In the PlayState class, use the `handleInput` method to make the bird jump whenever the user clicks the screen.
+>*Hint:* Use `Gdx.input.justTouched()` to check for user input.
+
+3. Still in the PlayState, create a private instance variable for the background and call it bg. Initialize it to `bg.png`.
+
+4. In the render method, draw the background. 
+>*Hint:* The coordinates for the background are ((cam.position.x - cam.viewportWidth / 2), 0). Why?
+
+5. Test it.
+
+6. Make it so the game stops if the bird hits the ground (aka as the bottom of the screen). To do that, edit the method update. When the `position.y` goes below zero, set it to zero (remember if statements). In addition, only add `GRAVITY` if the bird is not already at zero.
+
+7. Test it.
 
 
+## Create the Tubes
+
+1. Inside the sprites package, create a class Tube.
+
+2. Tube needs two Textures, topTube and bottomTube. 
+>*Hint:* Instance variables should be private.
+
+3. Create a constructor that takes in a `float x` indicating the position where the tube should start. 
+>*Hint:* Take a look at our image assets and figure out which one we should use to initialize our tubes.
+
+4. Tube needs a few more instance variables:
+```java
+private static final int TUBE_GAP = 100; //opening between tubes
+private static final int LOWEST_OPENING = 120; //lowest position the top of the bottom tube can be, must be above 90 to be above ground level
+private static final int FLUCTUATION = 130; //may adjust to keep top tube in view
+private Vector2 posTopTube, posBottomTube;
+private Random rand;
+```
+
+5. Initialize the tubes position using Random.
+```java
+rand = new Random();
+posTopTube = new Vector2(x, rand.nextInt(FLUCTUATION) + LOWEST_OPENING + TUBE_GAP);
+posBottomTube = new Vector2(x, posTopTube.y - TUBE_GAP - bottomTube.getHeight());
+```
+
+6. Generate Getters for top/bottom tubes and their respective positions.
+
+7. Inside the PlayState, create a tube and initialize its position on the x-axis to 100.
+
+8. Draw the tubes.
+>*Hint:* Take a look at how we drew the bird.
+
+9. Run it multiple times. What happens to the tube position?
 
 
+## Flying through obstacles
 
+1. In the Tube class, create a `reposition` method that takes in a `float x` and *sets* the positions of the top and bottom tubes.
+>*Hint:* You can use the same positions used to initialize posTopTube and posBotTube since they were positioned randomly.
+<br>*Hint:* Vector2 has a `set` method.
 
+2. In the PlayState class, create the following constants:
+```java
+private static final int TUBE_SPACING = 125;
+private static final int TUBE_COUNT = 4;
+```
 
+3. Replace the tube in the PlayState class with an array of Tubes (`Array<Tube> tubes`).
 
+4. Initialize the array and add `TUBE_COUNT` tubes using `tubes.add(new Tube(i * (TUBE_SPACING + Tube.TUBE_WIDTH)));`
 
+5. In the Tube class, create a public constant for the TUBE_WIDTH and set it to 52.
+
+6. In the PlayState class, inside the update method, create the logic to reposition tubes when they get out of the camera viewport. 
+```java
+if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth()){
+    tube.reposition(tube.getPosTopTube().x +((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
+}
+```
+
+7. In the Bird class, create a constant `MOVEMENT` and set it to 100. This represents the horizontal movement of the bird.
+
+8. In the update method, make sure the position on the x axis is also updated by passing in `MOVEMENT * dt` as a paramenter to the x argument.
+
+9. In the PlayState class, update the camera's position in the game world based on the position of the bird. To do that, inside the update method set the `cam.position.x` equal to `bird.getPosition().x + 80`.
+
+10. At the end of the update method, tell libGDX that the camera has been repositioned by calling `cam.update();`.
