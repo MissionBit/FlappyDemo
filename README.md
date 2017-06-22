@@ -337,3 +337,64 @@ if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTop
 9. In the PlayState class, update the camera's position in the game world based on the position of the bird. To do that, inside the update method set the `cam.position.x` equal to `bird.getPosition().x + 80`.
 
 10. At the end of the update method, tell libGDX that the camera has been repositioned by calling `cam.update();`.
+
+
+## Collision Detection
+
+1. To handle collisions, we'll draw rectangles around the tubes. In the class `Tube`, declare two objects of type `Rectangle`: `boundsTop` and `boundsBot`.
+
+2. Initialize them in the constructor.
+>*Hint:* The constructor for Rectangle takes in 4 parameters: the x coordinate, the y coordinate, the width, and the height. Since we want these rectangles to completely cover the tubes, how can we use instance variables and attributes from the Tube class to pass in the desired parameters for each rectangle?
+
+3. Remember to also reposition the rectangles in the `reposition` method.
+>*Hint:* Rectangle has a `setPosition(float x, float y)` method.
+
+4. Create a `collides` method that takes in a `Rectangle player` and returns true if the player overlaps the `boundsTop` or `boundsBot`, but false otherwise.
+
+5. Now we need to create a `Rectangle bounds` for the bird. Don't forget to initialize it.
+
+6. Every time the bird moves we need to update its bounds. Use the `setPosition(float x, float y)` to update the bounds whenever the bird moves. 
+
+7. Create a getter method for `bounds`.
+
+8. In the `PlayState` class, we already have a `for loop` that cycles through our `tubes` inside the `update` method. We can use that same `for loop` to check if the `bird` collides with any `tube`. If there is a collision, call `gsm.set(new PlayState(gsm))` and `break` out of the loop.
+
+
+## Dispose Resources
+
+1. In the `GameStateManager`, every time we `pop` a state we should `dispose` of it since we can't reuse states. Note that `states.pop()` is called twice in this class.
+
+2. In the `MenuState` class, remove the call to `dispose` from the `handleInput` method because now we're disposing of states when we `pop` them off. What happens when the method `dispose` from the `MenuState` class gets called? 
+
+3. In the `PlayState` class, we need to dispose of `bg`, `bird`, and all of the `tubes`. Note that you'll have to implement the `dispose` methods for the `Bird` and `Tube` classes.
+
+4. Add log messages to the `dispose` methods in PlayState and MenuState.
+
+5. Run. You should see the log messages every times the game restarts.
+
+
+## Placing the Ground
+
+1. The ground will be created the same way as the tubes: it'll be declared as a Texture that gets repositioned every time it goes off of the screen. Create `ground` as an instance variable of the class `PlayState`, and initialize it using `ground.png`.
+
+2. Create `groundPos1` and `groundPos2` as instance variables of type `Vector2`. Initialize `groundPos1` to the positions of the bottom left corner of our camera `cam`. Initialize `groundPos2` to the position directly to the right of `groundPos1`.
+
+3. Draw the `ground` twice, at positions `groundPos1` and `groundPos2`.
+
+4. Run. What do you notice?
+
+5. Create a constant `GROUND_Y_OFFSET` that equals to -50, and change the initial y value of `groundPos1` and `groundPos2` to this constant.
+
+6. Create a method `updateGround()` that checks if each of the ground right edges is to the left of the left edge of the viewport, ie, it checks if each of the ground projections are out of the camera's field of vision. If it is, use the method `add(float x, float y)` from the `Vector2` class to update the ground position, ie, `groundPos1` or `groundPos2`.
+
+7. Make sure to call `updateGround()` in the `update` method.
+
+8. Kill the bird if it hits the ground. You can do that by checking if the bird's position on the y axis is less than or equal to the y position of the top edge of the ground.
+>*Hint:* The top edge of the ground is the ground's height + offset.
+<br>*Hint:* To kill the bird, we do the same as we did when the bird collides with a tube: restart the game.
+
+9. Make sure to `dispose` of the ground Texture.
+
+10. Try it out!
+
+
