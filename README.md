@@ -323,20 +323,22 @@ private static final int TUBE_COUNT = 4;
 
 5. In the Tube class, create a public constant for the TUBE_WIDTH and set it to 52.
 
-6. In the PlayState class, inside the update method, create the logic to reposition tubes when they get out of the camera viewport. 
+6. In the PlayState class, inside the update method, create the logic to reposition tubes when they get out of the camera viewport. Note that you will have to check it for each tube.
 ```java
 if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTopTube().getWidth()){
     tube.reposition(tube.getPosTopTube().x +((Tube.TUBE_WIDTH + TUBE_SPACING) * TUBE_COUNT));
 }
 ```
 
-7. In the Bird class, create a constant `MOVEMENT` and set it to 100. This represents the horizontal movement of the bird.
+7. In the `render` method, remember to render all the tubes instead of just one.
 
-8. In the update method, make sure the position on the x axis is also updated by passing in `MOVEMENT * dt` as a paramenter to the x argument.
+8. In the Bird class, create a constant `MOVEMENT` and set it to 100. This represents the horizontal movement of the bird.
 
-9. In the PlayState class, update the camera's position in the game world based on the position of the bird. To do that, inside the update method set the `cam.position.x` equal to `bird.getPosition().x + 80`.
+9. In the update method, make sure the position on the x axis is also updated by passing in `MOVEMENT * dt` as a paramenter to the x argument.
 
-10. At the end of the update method, tell libGDX that the camera has been repositioned by calling `cam.update();`.
+10. In the PlayState class, update the camera's position in the game world based on the position of the bird. To do that, inside the update method set the `cam.position.x` equal to `bird.getPosition().x + 80`.
+
+11. At the end of the update method, tell libGDX that the camera has been repositioned by calling `cam.update();`.
 
 
 ## Collision Detection
