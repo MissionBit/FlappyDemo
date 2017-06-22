@@ -398,3 +398,99 @@ if(cam.position.x - cam.viewportWidth / 2 > tube.getPosTopTube().x + tube.getTop
 10. Try it out!
 
 
+## Animating Sprites
+
+1. Inside of the `sprites` package, create a new class `Animation`.
+
+2. The `Animation` class needs the following attributes:
+```java
+Array<TextureRegion> frames; //where we store all of our frames
+float maxFrameTime; //this determines how long a frame needs to stay in view before switching to the next one
+float currentFrameTime; //how long the animation has been in the current frame
+int frameCount; //number of frames in our animation
+int frame; //the current frame we're in
+```
+
+3. Now we need to initialize these instance variables in the constructor:
+```java
+public Animation(TextureRegion region, int frameCount, float cycleTime){
+    frames = new Array<TextureRegion>();
+    TextureRegion temp;
+    int frameWidth = region.getRegionWidth() / frameCount;
+    for(int i = 0; i < frameCount; i++){
+        temp = new TextureRegion(region, i * frameWidth, 0, frameWidth, region.getRegionHeight());
+        frames.add(temp);
+    }
+    this.frameCount = frameCount;
+    maxFrameTime = cycleTime / frameCount;
+    frame = 0;
+}
+```
+
+4. We also need an `update` method to cycle through the frames.
+```java
+public void update(float dt){
+    currentFrameTime += dt;
+    if(currentFrameTime > maxFrameTime){
+        frame++;
+        currentFrameTime = 0;
+    }
+    if(frame >= frameCount)
+        frame = 0;
+
+}
+```
+
+5. Finally, we need a getter for the frames.
+```java
+public TextureRegion getFrame(){
+    return frames.get(frame);
+}
+```
+
+6. In the `Bird` class, we need to create a `birdAnimation`, which will be initialized with `birdanimation.png`, a frame count of 3, and a cycle time of 0.5f.
+
+7. Now that we have a `birdAnimation`, we need to get rid of `bird` and replace it with the new `texture`, but remember this one is 3 times as wide.
+
+8. In `update`, update the `birdAnimation` and don't forget to pass in the delta time.
+
+9. In `getTexture`, now we need to return `birdAnimation.getFrame()` instead.
+
+10. Also update the `dispose` method to dispose of the new `texture` instead of `bird`.
+
+
+## Music & Sound Effects
+
+1. Find the music and sound effect files in our assets folder.
+
+2. Inside `FlappyDemo`, create a `music` instance variable of the type `Music` and initialize it to `Gdx.audio.newMusic(Gdx.files.internal("music.mp3"))`
+
+3. inside the constructor, set the configurations for `music` as follows:
+```java
+music.setLooping(true);
+music.setVolume(0.1f);
+music.play();
+```
+
+4. Create a dispose method (Generate > Override) and dispose of `music`.
+
+5. To create the sound effect, go to the `Bird` class and create an instance variable `Sound flap`, which will be initialized to `Gdx.audio.newSound(Gdx.files.internal("sfx_wing.ogg"))`
+
+6. Inside the `jump` method, call `flap.play()`. To change the volume of the sound effect, pass in a float, say, 0.5f.
+
+7. Dispose of `flap`.
+
+
+## Porting to Android
+
+1. Go to android > AndroidManifest.xml and change the screenOrientation to portrait.
+
+2. Copy the `cam.setToOrtho...` from the `PlayState` to the `MenuState`.
+
+3. Copy the `sb.setProjectionMatrix...` from the `PlayState` to the `MenuState`.
+
+4. Update the following lines in the `MenuState`:
+```java
+sb.draw(background, 0,0);
+sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
+```
