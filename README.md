@@ -494,3 +494,21 @@ music.play();
 sb.draw(background, 0,0);
 sb.draw(playBtn, cam.position.x - playBtn.getWidth() / 2, cam.position.y);
 ```
+
+
+## Suggested improvements:
+
+1. Instead of creating a `Texture` for each tube, reuse the same 2 Textures by making them static.
+
+2. Notice that the game doesn't seem to detect collision sometimes when the bird hits the top tube. Fix it.
+ 
+3. When restarting the game, go to the Menu screen instead of just starting over, or create a "try again" screen.
+
+4. Count scores.
+
+5. Create different levels of difficulty.
+
+6. Make the bird flip over when falling to the ground.
+
+7. When the user hits "play", make the bird only start flying after the user taps the screen for the first time. Indicate what needs to be done (ie, give instructions on how to play).
+
