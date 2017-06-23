@@ -19,10 +19,10 @@ public class FlappyDemo extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-        music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
-        music.setLooping(true);
-        music.setVolume(0.1f);
-        music.play();
+		music = Gdx.audio.newMusic(Gdx.files.internal("music.mp3"));
+		music.setLooping(true);
+		music.setVolume(0.1f);
+		music.play();
 		gsm = new GameStateManager();
 		gsm.push(new MenuState(gsm));
 		Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -37,7 +37,8 @@ public class FlappyDemo extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
+		super.dispose();
+        batch.dispose();
         music.dispose();
 	}
 }

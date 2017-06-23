@@ -25,7 +25,7 @@ public class PlayState extends State {
 
     public PlayState(GameStateManager gsm) {
         super(gsm);
-        bird = new Bird(50, 200);
+        bird = new Bird(50, 250);
         bg = new Texture("bg.png");
         ground = new Texture("ground.png");
         groundPos1 = new Vector2(cam.position.x - cam.viewportWidth / 2, GROUND_Y_OFFSET);
@@ -93,7 +93,7 @@ public class PlayState extends State {
         System.out.println("Disposing of Play State");
     }
 
-    public void updateGround() {
+    private void updateGround() {
         if (groundPos1.x + ground.getWidth() < cam.position.x - cam.viewportWidth / 2) {
             groundPos1.add(2 * ground.getWidth(), 0);
         }
