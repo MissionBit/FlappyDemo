@@ -412,16 +412,15 @@ float currentFrameTime; //how long the animation has been in the current frame
 int frameCount; //number of frames in our animation
 int frame; //the current frame we're in
 ```
+>*Hint:* Are these `private`, `protected`, or `public`?
 
 3. Now we need to initialize these instance variables in the constructor:
 ```java
 public Animation(TextureRegion region, int frameCount, float cycleTime){
     frames = new Array<TextureRegion>();
-    TextureRegion temp;
     int frameWidth = region.getRegionWidth() / frameCount;
     for(int i = 0; i < frameCount; i++){
-        temp = new TextureRegion(region, i * frameWidth, 0, frameWidth, region.getRegionHeight());
-        frames.add(temp);
+        frames.add(new TextureRegion(region, i * frameWidth, 0, frameWidth, region.getRegionHeight()));
     }
     this.frameCount = frameCount;
     maxFrameTime = cycleTime / frameCount;
@@ -439,7 +438,6 @@ public void update(float dt){
     }
     if(frame >= frameCount)
         frame = 0;
-
 }
 ```
 
