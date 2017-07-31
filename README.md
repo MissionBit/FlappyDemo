@@ -35,7 +35,7 @@ This material is based on the Youtube tutorial:
 > *Hint:* Don't forget that we capitalize class names
 
 3. Make the State class abstract
-4. Each state needs: a **camera** to locate a position in the game world, a **mouse** or some sort of pointer to indicate where the user clicks, which is defined as a Vector3, ie, a (x,y) coordinate, and a GameStateManager to manage our state transitions (for example, from menu to play, or from play to pause. 
+4. Each state needs: a **camera** to locate a position in the game world, a **mouse** or some sort of pointer to indicate where the user clicks, which is defined as a Vector3, ie, a (x,y) coordinate, and a GameStateManager to manage our state transitions (for example, from menu to play, or from play to pause). 
 <br>So we must declare the following State instance variables: 
 ```java
 protected OrthographicCamera cam;
